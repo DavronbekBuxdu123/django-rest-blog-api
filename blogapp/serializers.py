@@ -28,6 +28,7 @@ class SimpleAuthorSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
         fields = ["id", "username", "first_name", "last_name"]
+
 class BlogSerializer(serializers.ModelSerializer):
     author = SimpleAuthorSerializer(read_only=True)
     class Meta:
