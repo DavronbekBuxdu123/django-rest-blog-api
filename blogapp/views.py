@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from rest_framework.response import Response
-from .serializers import UserRegisterSerializer,BlogSerializer
+from .serializers import UserRegisterSerializer,BlogSerializer,UpdateUserProfileSerializer
 from rest_framework import status
 from rest_framework.decorators import api_view,permission_classes
 from .models import Blog
@@ -58,3 +58,13 @@ def delete_blog(request,pk):
     blog.delete()
     return  Response(status=status.HTTP_204_NO_CONTENT) 
                 
+
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def update_user_profile(request):
+    user=request.user
+    serializer=UpdateUserProfileSerializer(user,data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return  Response(serializer.data)   
+    return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
